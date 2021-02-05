@@ -1,0 +1,77 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: aa6bcde3ebc92bfc773c614d5891d7f3cfc123f2f79bfa6701105785f4fd5771
+
+name:           hassword
+version:        0.1.0.0
+synopsis:       A deterministic password manager
+description:    Please see the README on GitHub at <https://github.com/E-liza-bet/hassword#readme>
+category:       Cryptography
+homepage:       https://github.com/E-liza-bet/hassword#readme
+bug-reports:    https://github.com/E-liza-bet/hassword/issues
+author:         ret2buddha
+maintainer:     anony@github.com
+copyright:      Copyright (c) 2020 ret2buddha
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/E-liza-bet/hassword
+
+library
+  exposed-modules:
+      Hassword.Algorithm
+      Hassword.Cli
+      Hassword.Config
+      Hassword.Core
+      Hassword.Crypto
+  other-modules:
+      Paths_hassword
+  hs-source-dirs:
+      src
+  build-depends:
+      QuickCheck
+    , base >=4.7 && <5
+    , bytestring
+    , parsec
+  default-language: Haskell2010
+
+executable hassword
+  main-is: Main.hs
+  other-modules:
+      Paths_hassword
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      QuickCheck
+    , base >=4.7 && <5
+    , bytestring
+    , hassword
+    , parsec
+  default-language: Haskell2010
+
+test-suite hassword-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_hassword
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      QuickCheck
+    , base >=4.7 && <5
+    , bytestring
+    , hassword
+    , parsec
+  default-language: Haskell2010

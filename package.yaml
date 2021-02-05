@@ -1,0 +1,51 @@
+name:                hassword
+version:             0.1.0.0
+github:              "E-liza-bet/hassword"
+license:             BSD3
+author:              "ret2buddha"
+maintainer:          "anony@github.com"
+copyright:           "Copyright (c) 2020 ret2buddha"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+synopsis:            A deterministic password manager
+category:            Cryptography
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/E-liza-bet/hassword#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- bytestring
+- parsec
+- QuickCheck
+
+library:
+  source-dirs: src
+
+executables:
+  hassword:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hassword
+
+tests:
+  hassword-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hassword

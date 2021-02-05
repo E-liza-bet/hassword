@@ -1,0 +1,13 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "hassword:lib"
+
+    - path: "./app/Main.hs"
+      component: "hassword:exe:hassword"
+
+    - path: "./app/Paths_hassword.hs"
+      component: "hassword:exe:hassword"
+
+    - path: "./test"
+      component: "hassword:test:hassword-test"
