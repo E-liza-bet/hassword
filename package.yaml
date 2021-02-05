@@ -7,16 +7,12 @@ maintainer:          "anony@github.com"
 copyright:           "Copyright (c) 2020 ret2buddha"
 
 extra-source-files:
-- README.md
-- ChangeLog.md
+- README.org
 
 # Metadata used when publishing your package
 synopsis:            A deterministic password manager
 category:            Cryptography
 
-# To avoid duplicated efforts in documentation and dealing with the
-# complications of embedding Haddock markup inside cabal files, it is
-# common to point users to the README.md file.
 description:         Please see the README on GitHub at <https://github.com/E-liza-bet/hassword#readme>
 
 dependencies:

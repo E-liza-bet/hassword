@@ -19,8 +19,6 @@ linearSearch valueFunc x ys =
                     let score' = valueFunc x y
                     in if score' > score
                        then (idx+1,idx+1,score') else (ans,idx+1,score))
-          (-1,-1,0)
+          (0,-1,minBound)
       (ans,_,_) = f ys
   in ans
-
-

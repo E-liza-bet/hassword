@@ -1,0 +1,9 @@
+* hassword
+#+BEGIN_QUOTE
+A deterministic password manager written in haskell.
+#+END_QUOTE
+
+Deterministic means for the same site and the same account, 
+it will use deterministic hash algorithm to generate the same password.
+As a result, there are no sensitive data in the disk which should be calfully cared.
+But it store some public information and provide fuzzy search for convinient.
