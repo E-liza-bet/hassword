@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3c771640f8defe176f543e0a66e99e1133c39c5524c873202d0f5683ff7cd71e
+-- hash: 52d414a85297834b08e1ca610fa193ac59939c3c35c95cf1bd3c31fa13abac78
 
 name:           hassword
 version:        0.1.0.0
@@ -33,6 +33,7 @@ library
       Hassword.Config
       Hassword.Core
       Hassword.Crypto
+      Hassword.Database
   other-modules:
       Paths_hassword
   hs-source-dirs:

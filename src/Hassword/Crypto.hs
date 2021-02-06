@@ -4,11 +4,12 @@ module Hassword.Crypto (hash
                        ,ascii2b
                        ,b2asciiWith
                        ,alphabet
-                       ,alphabet')
+                       )
 where
 import Data.Bits (xor)
 import Data.Word (Word64)
 import Data.Char
+import Hassword.Config
 
 type Key = [Word64]
 type Message = [Word64]
@@ -18,7 +19,6 @@ padding :: Integral a => Int -> a -> [a] -> [a]
 padding len padval orig = orig <> replicate (len-length orig)  padval
 
 alphabet = ['A'..'Z'] <> ['a'..'z'] <> ['0'..'9'] :: String
-alphabet' = "!@#$%&*()-,[]{}" :: String
 
 --hold : The base of (type b)'s value = base
 baseConvert :: (Integral a,Integral b) => Int -> a -> [b]
@@ -38,11 +38,11 @@ b2ascii :: Integral a => [a] -> String
 b2ascii = b2asciiWith alphabet
 
 hash :: Integral a => [Word64] -> [a]
-hash bs = let addition = 0xdeadbeaf
-              init = 0xbeebee2134
+hash bs = let addition = fromIntegral _HashAddition
+              multiplient = fromIntegral _HashMultiplient
               f :: [Word64] -> Word64
-              f [] = init
-              f (x:xs) = x * f xs + addition
+              f [] = 1
+              f (x:xs) = (x * multiplient + addition) * f xs
           in padding 8 0 $ baseConvert 256 $ f bs
 
 -- hmac hash(key,message) to 8 int64

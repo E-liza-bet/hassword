@@ -6,7 +6,7 @@ import System.Clipboard (setClipboardString)
 import Control.Exception (bracket_)
 import Control.Monad (forever)
 import Data.Char(isDigit)
-import Hassword.Config
+import Hassword.Database
 import Hassword.Core
 
 help :: String
