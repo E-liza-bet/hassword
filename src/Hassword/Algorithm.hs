@@ -1,5 +1,5 @@
 module Hassword.Algorithm where
-import Data.List (isSubsequenceOf)
+import Data.List (isSubsequenceOf,maximumBy)
 
 subPatternWith :: Int -> [a] -> [[a]]
 subPatternWith _ [] = []
@@ -12,13 +12,8 @@ subPattern s = foldMap (`subPatternWith` s) [1..length s]
 
 similarity :: Eq a => [a] -> [a] -> Int
 similarity x y = maximum [ if any (`isSubsequenceOf` y) (subPatternWith i x)
-                           then i else 0  |i <- [1..length x]]
+                           then i else 0  | i <- [1..length x]]
 
-linearSearch valueFunc x ys =
-  let f = foldl (\ (ans,idx,score) y ->
-                    let score' = valueFunc x y
-                    in if score' > score
-                       then (idx+1,idx+1,score') else (ans,idx+1,score))
-          (0,-1,minBound)
-      (ans,_,_) = f ys
-  in ans
+maxScoreBy valueFunc x ys = select $ maximumBy (\ (i,_,score) (i',_,score') -> score `compare` score')
+                            $ zip3 [0..] ys (map (valueFunc x) ys)
+                            where select (x,y,_) = (x,y)

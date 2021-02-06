@@ -60,7 +60,7 @@ cli = do
                  (\ entries -> do
                      (>:) "Give me some information:"
                      x <- getLine
-                     return $ fuzzSearch x entries)
+                     return $ fst (fuzzSearch x entries))
                  "The nearest entry:"
         
   let doShow = do

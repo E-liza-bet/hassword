@@ -59,5 +59,5 @@ editDb = do
 entryScore :: String -> Entry -> Int
 entryScore s (Entry site user addition) = maximum $ map (similarity s) [site,user,addition]
 
-fuzzSearch :: String -> [Entry] -> Int
-fuzzSearch = linearSearch entryScore
+fuzzSearch :: String -> [Entry] -> (Int,Entry)
+fuzzSearch = maxScoreBy entryScore
