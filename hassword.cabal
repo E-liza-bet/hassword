@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: aa6bcde3ebc92bfc773c614d5891d7f3cfc123f2f79bfa6701105785f4fd5771
+-- hash: 17c7ee59eac0e4f6165e679c3b5664c7b161bfe88906cb620923a273f7924f02
 
 name:           hassword
 version:        0.1.0.0
@@ -20,8 +20,7 @@ license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
-    README.md
-    ChangeLog.md
+    README.org
 
 source-repository head
   type: git
@@ -39,7 +38,8 @@ library
   hs-source-dirs:
       src
   build-depends:
-      QuickCheck
+      Clipboard
+    , QuickCheck
     , base >=4.7 && <5
     , bytestring
     , parsec
@@ -53,7 +53,8 @@ executable hassword
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      QuickCheck
+      Clipboard
+    , QuickCheck
     , base >=4.7 && <5
     , bytestring
     , hassword
@@ -69,7 +70,8 @@ test-suite hassword-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      QuickCheck
+      Clipboard
+    , QuickCheck
     , base >=4.7 && <5
     , bytestring
     , hassword
