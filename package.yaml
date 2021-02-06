@@ -20,6 +20,7 @@ dependencies:
 - bytestring
 - parsec
 - Clipboard
+- process
 - QuickCheck
 
 library:

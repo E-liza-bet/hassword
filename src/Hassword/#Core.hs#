@@ -5,7 +5,6 @@ import System.Process (callCommand)
 import System.Exit
 import Data.Char
 import Data.List (find)
-import Data.Maybe (isJust)
 import Control.Monad (liftM2)
 import Control.Exception (catch,IOException)
 import Hassword.Config
@@ -29,7 +28,7 @@ dbPath = "/.config/hasword.db" :: String
 saveDb :: Entry -> IO ()
 saveDb e = do
   home <- getEnv "HOME"
-  appendFile  (home ++ dbPath) (show e ++ "\n")
+  appendFile  (home ++ dbPath) (show e)
   
 readDb :: IO (Maybe [Entry])
 readDb = do
@@ -49,10 +48,14 @@ editDb :: IO ()
 editDb = do
   home  <- getEnv "HOME"
   let editWith c = callCommand $ c ++ " " ++ (home++dbPath)
-  editors <- mapM lookupEnv ["EDITOR","VISUAL"]
+  getEnv "EDITOR"
+   `catch` (\ e -> do
+               let err = show (e ::IOException)
+               )
+  editors <- mapM getEnv ["EDITOR","VISUAL"]
   let defaultEditor = "vi"
-  case find isJust editors of
-    Just (Just editor) -> editWith editor
+  case find (not . null) editors of
+    Just editor -> editWith editor
     Nothing -> editWith defaultEditor
   
   

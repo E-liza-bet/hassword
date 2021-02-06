@@ -16,7 +16,8 @@ help = "Welcome to hassword, a deterministic password manager!\n"++
        "the other keys.\n"++
        "record :: Fill in some public information to calculate a strong password and send it to clipboard.\n"++
        "search :: Fuzzy search to find the most similar entry, calculate it again.\n"++
-       "show   :: Show all the entries with index which can be typed in to get the coresponding password."
+       "show   :: Show all the entries with index which can be typed in to get the coresponding password.\n"++
+       "edit   :: Edit entries directly. Make sure you know what you are doing!"
        
 withEcho echo action = do
         old <- hGetEcho stdin
@@ -69,7 +70,7 @@ cli = do
                                    putStrLn (show row++" "++show l))
                          (zip [1..] entries)
           Nothing -> return ()
-       
+
   forever $ do
     (>:) "> "
     cmd <- getLine
@@ -77,8 +78,9 @@ cli = do
         "record" -> doRecord
         "search" -> doSearch
         "show"   -> doShow
+        "edit"   -> editDb
         "exit"   -> exitSuccess
         "help"   -> putStrLn help
         _        -> if all isDigit cmd
                    then showEntry (\ _ -> return ((read cmd :: Int)-1)) mempty
-                   else putStrLn "Command:[help|record|search|show|exit]"
+                   else putStrLn "Command:[help|record|search|show|edit|exit]"
