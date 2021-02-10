@@ -5,7 +5,9 @@ import System.Environment (getEnv)
 import System.Clipboard (setClipboardString)
 import Control.Exception (bracket_)
 import Control.Monad (forever)
-import Data.Char(isDigit)
+import Data.Char(isDigit,ord,chr)
+import Data.List(isPrefixOf)
+
 import Hassword.Database
 import Hassword.Core
 
@@ -22,7 +24,40 @@ help = "Welcome to hassword, a deterministic password manager!\n"++
 withEcho echo action = do
         old <- hGetEcho stdin
         bracket_ (hSetEcho stdin echo) (hSetEcho stdin old) action
-
+        
+myGetLine :: String -> [String] -> String -> IO String
+myGetLine prompt completions ready = do
+    c <- getChar
+    --print $  ord c
+    case c of
+        '\t' -> do
+          let possibles = filter (isPrefixOf (reverse ready)) completions
+          case length possibles of
+            0 -> next ready
+            1 -> do
+              putStr $ drop (length ready) (head possibles)
+              next $ reverse (head possibles)
+            _ -> do
+              putStrLn ""
+              putStrLn $ unwords possibles
+              putStr $ prompt++reverse ready
+              next ready
+        '\DEL' -> 
+          if not (null ready)
+            then do
+            putChar '\b'
+            putChar ' '
+            putChar '\b'
+            next (tail ready)
+            else next ready
+        '\n' -> do
+          putChar '\n'
+          return $ reverse ready
+        _ -> do
+            putChar c -- do echo everything else
+            next (c:ready)
+   where next = myGetLine prompt completions
+         
 cli :: IO ()
 cli = do
   let (>:) s = do putStr s;hFlush stdout
@@ -71,10 +106,16 @@ cli = do
                          (zip [1..] entries)
           Nothing -> return ()
 
+  hSetEcho stdin False
+  hSetBuffering stdin NoBuffering
+  hSetBuffering stdout NoBuffering
+  
   forever $ do
     (>:) "> "
-    cmd <- getLine
-    case cmd of
+    cmd <- myGetLine "> " ["record","search","show","edit","exit","help"] []
+    let cmds = words cmd
+    putStrLn $ head cmds
+    case head cmds of
         "record" -> doRecord
         "search" -> doSearch
         "show"   -> doShow
