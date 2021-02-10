@@ -30,7 +30,8 @@ readline prompt completions ready = do
     c <- getChar
     --print $  ord c
     case c of
-        '\t' -> do
+        '\t' -> if not (null ready)
+               then do
           let lastword = last $ words (reverse ready)
           let possibles = filter (isPrefixOf lastword) completions
           case length possibles of
@@ -44,6 +45,11 @@ readline prompt completions ready = do
               putStrLn $ unwords possibles
               putStr $ prompt++reverse ready
               next ready
+               else do
+          putStrLn ""
+          putStrLn $ unwords completions
+          putStr prompt
+          next ready
         '\DEL' -> 
           if not (null ready)
             then do
