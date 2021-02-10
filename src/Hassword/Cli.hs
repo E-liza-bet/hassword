@@ -25,18 +25,20 @@ withEcho echo action = do
         old <- hGetEcho stdin
         bracket_ (hSetEcho stdin echo) (hSetEcho stdin old) action
         
-myGetLine :: String -> [String] -> String -> IO String
-myGetLine prompt completions ready = do
+readline :: String -> [String] -> String -> IO String
+readline prompt completions ready = do
     c <- getChar
     --print $  ord c
     case c of
         '\t' -> do
-          let possibles = filter (isPrefixOf (reverse ready)) completions
+          let lastword = last $ words (reverse ready)
+          let possibles = filter (isPrefixOf lastword) completions
           case length possibles of
             0 -> next ready
             1 -> do
-              putStr $ drop (length ready) (head possibles)
-              next $ reverse (head possibles)
+              let left = drop (length lastword) (head possibles)
+              putStr left
+              next $ reverse left ++ ready
             _ -> do
               putStrLn ""
               putStrLn $ unwords possibles
@@ -56,7 +58,7 @@ myGetLine prompt completions ready = do
         _ -> do
             putChar c -- do echo everything else
             next (c:ready)
-   where next = myGetLine prompt completions
+   where next = readline prompt completions
          
 cli :: IO ()
 cli = do
@@ -112,7 +114,7 @@ cli = do
   
   forever $ do
     (>:) "> "
-    cmd <- myGetLine "> " ["record","search","show","edit","exit","help"] []
+    cmd <- readline "> " ["record","search","show","edit","exit","help"] []
     let cmds = words cmd
     putStrLn $ head cmds
     case head cmds of
