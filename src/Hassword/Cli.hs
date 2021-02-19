@@ -124,8 +124,8 @@ cli = do
     let cmds = words cmd
     putStrLn $ head cmds
     case head cmds of
-        "record" -> doRecord
-        "search" -> doSearch
+        "record" -> withEcho True doRecord
+        "search" -> withEcho True doSearch
         "show"   -> doShow
         "edit"   -> editDb
         "exit"   -> exitSuccess
