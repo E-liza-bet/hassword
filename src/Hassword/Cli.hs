@@ -4,7 +4,7 @@ import System.Exit (exitSuccess)
 import System.Environment (getEnv)
 import System.Clipboard (setClipboardString)
 import Control.Exception (bracket_)
-import Control.Monad (forever)
+import Control.Monad (forever,unless)
 import Data.Char(isDigit,ord,chr)
 import Data.List(isPrefixOf)
 
@@ -26,9 +26,23 @@ withEcho echo action = do
         bracket_ (hSetEcho stdin echo) (hSetEcho stdin old) action
         
 readline :: String -> [String] -> String -> IO String
-readline prompt completions ready = do
+readline prompt completions ready=do
+  oldEcho <- hGetEcho stdin
+  oldIn <- hGetBuffering stdin
+  oldOut <- hGetBuffering stdout
+  let fin = do
+        hSetEcho stdin False
+        hSetBuffering stdin NoBuffering
+        hSetBuffering stdout NoBuffering
+  let fout = do
+        hSetEcho stdin oldEcho
+        hSetBuffering stdin oldIn
+        hSetBuffering stdout oldOut
+  bracket_ fin fout (readline' prompt completions ready)
+  
+readline' :: String -> [String] -> String -> IO String
+readline' prompt completions ready = do
     c <- getChar
-    --print $  ord c
     case c of
         '\t' -> if not (null ready)
                then do
@@ -114,18 +128,18 @@ cli = do
                          (zip [1..] entries)
           Nothing -> return ()
 
-  hSetEcho stdin False
-  hSetBuffering stdin NoBuffering
-  hSetBuffering stdout NoBuffering
+  --hSetEcho stdin False
+  --hSetBuffering stdin NoBuffering
+  --hSetBuffering stdout NoBuffering
   
   forever $ do
     (>:) "> "
     cmd <- readline "> " ["record","search","show","edit","exit","help"] []
     let cmds = words cmd
-    putStrLn $ head cmds
-    case head cmds of
-        "record" -> withEcho True doRecord
-        "search" -> withEcho True doSearch
+    unless (null cmds) $
+      case head cmds of
+        "record" -> doRecord
+        "search" -> doSearch
         "show"   -> doShow
         "edit"   -> editDb
         "exit"   -> exitSuccess
